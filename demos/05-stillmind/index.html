@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07080a">
+<title>Serein — Focus, by the minute</title>
+<meta name="description" content="Serein is a nocturnal focus practice: twelve guided minutes of slow breath, then a dim screen and a timer that asks nothing of you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+html,body{background:#07080a}
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#07080a;
+  --ink:#f1ebdf;
+  --mute:rgba(241,235,223,.64);
+  --soft:rgba(241,235,223,.42);
+  --line:rgba(241,235,223,.14);
+  --accent:#c9a87c;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth}
+body{
+  margin:0;padding:16px;overflow-x:clip;min-height:100vh;min-height:100dvh;
+  color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  font-weight:400;letter-spacing:-.01em;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+::selection{background:rgba(241,235,223,.22);color:#fff}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---------- frame ---------- */
+.frame{
+  position:relative;isolation:isolate;
+  margin:0;height:calc(100vh - 32px);height:calc(100dvh - 32px);min-height:600px;
+  border-radius:30px;overflow:hidden;background:linear-gradient(182deg,#101420 0%,#0a0c12 42%,var(--bg) 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 30px 80px rgba(0,0,0,.45);
+}
+.hero-video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 56%;
+  z-index:0;pointer-events:none;
+  filter:saturate(.62) brightness(.72) contrast(1.06);
+  transform:scale(1.06);
+  transition:transform 1.8s var(--ease);
+}
+.hero-video.is-ready{transform:scale(1)}
+.js-video .hero-video{opacity:0}
+.grade{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(7,8,10,.46) 0%,rgba(7,8,10,.14) 26%,rgba(7,8,10,.08) 44%,rgba(7,8,10,.58) 70%,rgba(7,8,10,.94) 88%,var(--bg) 100%),
+    linear-gradient(90deg,rgba(7,8,10,.62) 0%,rgba(7,8,10,.34) 34%,rgba(7,8,10,0) 62%);
+}
+.pblur{position:absolute;left:0;right:0;bottom:0;height:52%;z-index:2;pointer-events:none}
+.pblur>i{position:absolute;inset:0}
+.pblur>i:nth-child(1){-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  -webkit-mask-image:linear-gradient(to top,#000,transparent 100%);mask-image:linear-gradient(to top,#000,transparent 100%)}
+.pblur>i:nth-child(2){-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  -webkit-mask-image:linear-gradient(to top,#000,transparent 74%);mask-image:linear-gradient(to top,#000,transparent 74%)}
+.pblur>i:nth-child(3){-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+  -webkit-mask-image:linear-gradient(to top,#000,transparent 50%);mask-image:linear-gradient(to top,#000,transparent 50%)}
+.pblur>i:nth-child(4){-webkit-backdrop-filter:blur(17px);backdrop-filter:blur(17px);
+  -webkit-mask-image:linear-gradient(to top,#000,transparent 28%);mask-image:linear-gradient(to top,#000,transparent 28%)}
+.grain{
+  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px 180px;
+}
+.inner{
+  position:relative;z-index:5;height:100%;
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  padding:22px 32px 18px;
+}
+
+/* ---------- glass ---------- */
+.glass{
+  position:relative;
+  background:rgba(255,255,255,.055);
+  -webkit-backdrop-filter:blur(18px) saturate(130%);
+  backdrop-filter:blur(18px) saturate(130%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.07),0 18px 40px rgba(0,0,0,.24);
+}
+
+/* ---------- nav ---------- */
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;min-height:52px}
+.brand{
+  justify-self:start;display:inline-flex;align-items:baseline;gap:1px;
+  font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:27px;line-height:1;letter-spacing:-.02em;
+  text-shadow:0 2px 16px rgba(0,0,0,.28);
+}
+.brand sup{font-family:Inter,sans-serif;font-style:normal;font-size:9px;letter-spacing:0;transform:translateY(-9px);opacity:.7}
+.nav-pill{display:flex;align-items:center;gap:2px;padding:5px;border-radius:999px}
+.nav-pill a{
+  padding:9px 14px;border-radius:999px;font-size:13px;font-weight:500;letter-spacing:-.005em;
+  color:rgba(241,235,223,.78);transition:color .25s ease,background-color .25s ease;
+}
+.nav-pill a:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+.nav-right{justify-self:end;display:flex;align-items:center;gap:8px}
+.cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:#0b0c0e;border-radius:999px;
+  padding:11px 20px;font-size:13px;font-weight:500;letter-spacing:-.005em;
+  transition:transform .3s var(--ease),background-color .25s ease;
+}
+.cta:hover{transform:translateY(-1px);background:#fff}
+.cta:active{transform:scale(.98)}
+.cta svg{width:12px;height:12px;transition:transform .3s var(--ease)}
+.cta:hover svg{transform:translate(1px,-1px)}
+.burger{display:none;width:44px;height:44px;border-radius:999px;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.burger span{display:block;width:16px;height:1.5px;background:var(--ink);border-radius:2px;margin:0 auto}
+
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:40px;padding:12px 4px 30px}
+.copy{max-width:39rem;min-width:0}
+.eyebrow{
+  display:flex;align-items:center;gap:9px;margin:0 0 20px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--soft);
+}
+.eyebrow i{width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(201,168,124,.12)}
+h1{
+  margin:0;font-family:"Instrument Serif",Georgia,serif;font-weight:400;
+  font-size:clamp(38px,5.1vw,76px);line-height:1.0;letter-spacing:-.021em;
+  text-shadow:0 10px 34px rgba(0,0,0,.4);
+}
+.ln{display:block;overflow:hidden;padding:.06em .12em .1em;margin:-.06em -.12em -.1em}
+.ln>span{
+  display:block;transform:translateY(112%);
+  animation:lineRise 1.15s var(--ease) both;animation-delay:calc(var(--d,420ms) + var(--i,0) * 150ms);
+}
+h1 em{font-style:italic;color:rgba(241,235,223,.6)}
+@keyframes lineRise{from{transform:translateY(112%);filter:blur(6px)}to{transform:translateY(0);filter:blur(0)}}
+.sub{
+  margin:22px 0 0;max-width:31rem;
+  font-size:15.5px;line-height:1.62;font-weight:300;color:var(--mute);
+  text-shadow:0 2px 16px rgba(0,0,0,.36);
+  animation:fadeUp .95s var(--ease) .92s both;
+}
+.actions{display:flex;align-items:center;gap:10px;margin-top:26px;flex-wrap:wrap;animation:fadeUp .95s var(--ease) 1.06s both}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#0b0c0e;
+  border-radius:999px;padding:13px 22px;font-size:14px;font-weight:500;
+  transition:transform .3s var(--ease),background-color .25s ease;
+}
+.btn-primary:hover{background:#fff;transform:translateY(-1px)}
+.btn-primary:active{transform:scale(.985)}
+.btn-primary svg{width:13px;height:13px;transition:transform .3s var(--ease)}
+.btn-primary:hover svg{transform:translateX(2px)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:9px;border-radius:999px;padding:12px 18px;
+  font-size:14px;font-weight:400;color:rgba(241,235,223,.88);
+  transition:background-color .25s ease,color .25s ease;
+}
+.btn-ghost:hover{background:rgba(255,255,255,.08);color:var(--ink)}
+.btn-ghost svg{width:16px;height:16px;opacity:.85}
+
+/* ---------- breath module ---------- */
+.breath{
+  justify-self:end;align-self:end;width:236px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  animation:fadeUp 1.1s var(--ease) 1.2s both;
+}
+.ring{position:relative;width:236px;height:236px;display:grid;place-items:center}
+.ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+.ring .track{fill:none;stroke:rgba(241,235,223,.26);stroke-width:1}
+.ring .arc{fill:none;stroke:rgba(241,235,223,.92);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:703.7;stroke-dashoffset:703.7}
+.ring-inner{position:relative;text-align:center}
+.ring-inner b{
+  display:block;font-family:var(--mono);text-shadow:0 1px 10px rgba(0,0,0,.5);font-weight:400;font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--soft);
+}
+.ring-inner strong{
+  display:block;margin-top:7px;font-family:"Instrument Serif",Georgia,serif;font-style:italic;
+  font-weight:400;font-size:24px;letter-spacing:-.01em;color:rgba(241,235,223,.94);
+}
+.breath-note{margin:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);text-align:center}
+
+/* ---------- strip ---------- */
+.strip{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  border-top:1px solid var(--line);padding-top:14px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--soft);
+  animation:fadeIn 1.2s ease 1.4s both;
+}
+.strip span{white-space:nowrap}
+.strip .mid{color:rgba(241,235,223,.5)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.topbar{animation:fadeDown .9s var(--ease) .05s both}
+
+/* ---------- mobile menu ---------- */
+.menu{
+  position:absolute;inset:0;z-index:20;display:none;
+  background:rgba(9,10,13,.72);
+  -webkit-backdrop-filter:blur(26px) saturate(120%);backdrop-filter:blur(26px) saturate(120%);
+  padding:22px 24px 26px;
+}
+.menu[data-open="true"]{display:grid;grid-template-rows:auto 1fr;animation:fadeIn .3s ease both}
+.menu__top{display:flex;align-items:center;justify-content:space-between}
+.menu__close{width:44px;height:44px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.menu>div:last-child{display:flex;flex-direction:column;min-height:0;padding-top:24px}
+.menu__links{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.menu__links a{
+  font-family:"Instrument Serif",Georgia,serif;font-size:34px;line-height:1.3;letter-spacing:-.01em;
+  opacity:0;transform:translateY(10px);animation:fadeUp .5s var(--ease) both;animation-delay:calc(var(--i,0)*55ms + 60ms);
+}
+.menu__links a span{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--soft);margin-right:12px;vertical-align:4px}
+.menu__foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:18px;border-top:1px solid rgba(241,235,223,.14);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1024px){
+  .breath{width:190px}
+  .ring{width:190px;height:190px}
+  .copy{max-width:34rem}
+}
+@media (max-width:860px){
+  .frame{height:auto;min-height:calc(100vh - 32px);min-height:calc(100dvh - 32px)}
+  .inner{height:auto;min-height:calc(100vh - 32px);min-height:calc(100dvh - 32px)}
+  .nav-pill{display:none}
+  .burger{display:flex}
+  .topbar{grid-template-columns:1fr auto}
+  .nav-right .cta{display:none}
+  .hero{grid-template-columns:1fr;align-items:end;gap:22px;padding-bottom:22px}
+  .breath{order:-1;justify-self:end;align-self:start;width:auto;gap:8px}
+  .breath{margin-top:14px}
+  .ring{width:132px;height:132px}
+  .ring-inner strong{font-size:17px;margin-top:3px}
+  .ring-inner b{font-size:7.5px;letter-spacing:.14em}
+  .breath-note{display:none}
+  .strip .mid{display:none}
+}
+@media (max-width:560px){
+  body{padding:10px}
+  .frame{margin:0;height:auto;min-height:calc(100vh - 20px);min-height:calc(100dvh - 20px);border-radius:24px}
+  .inner{min-height:calc(100vh - 20px);min-height:calc(100dvh - 20px)}
+  .inner{padding:16px 20px 14px}
+  .brand{font-size:24px}
+  h1{font-size:clamp(34px,9.6vw,44px);line-height:1.03}
+  .eyebrow{font-size:9.5px;letter-spacing:.16em;margin-bottom:16px}
+  .sub{font-size:14.5px;line-height:1.58;max-width:22rem;margin-top:16px}
+  .actions{gap:8px;margin-top:18px}
+  .btn-primary{padding:12px 18px;font-size:13.5px}
+  .btn-ghost{padding:11px 14px;font-size:13.5px}
+  .strip{font-size:8.5px;letter-spacing:.13em;padding-top:12px}
+  .strip span:nth-child(2){display:none}
+  .hero{padding-bottom:16px;gap:18px}
+  .ring{width:124px;height:124px}
+  .menu__links a{font-size:29px}
+}
+@media (max-height:720px) and (min-width:861px){
+  .breath{width:186px}
+  .ring{width:186px;height:186px}
+  h1{font-size:clamp(34px,4vw,54px)}
+  .sub{margin-top:16px;font-size:14.5px}
+  .actions{margin-top:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;transition-duration:.001ms!important}
+  .ln>span{transform:none;filter:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="frame" id="top">
+  <video class="hero-video" id="heroVideo" muted autoplay playsinline preload="auto"
+   aria-hidden="true"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260702_081127_0992a171-d3c6-4978-8213-0ec5df8b6d63.mp4"></video>
+  <div class="grade" aria-hidden="true"></div>
+  <div class="pblur" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="inner">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Serein, home">Serein<sup>®</sup></a>
+
+      <nav class="nav-pill glass" aria-label="Primary">
+        <a href="#sessions" aria-current="page">Sessions</a>
+        <a href="#method">Method</a>
+        <a href="#sounds">Sounds</a>
+        <a href="#journal">Journal</a>
+      </nav>
+
+      <div class="nav-right">
+        <a class="cta" href="#sessions">
+          Begin a session
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="burger glass" id="menuOpen" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="copy">
+        <p class="eyebrow"><i aria-hidden="true"></i>Nocturnal practice — 12 minutes</p>
+        <h1>
+          <span class="ln"><span style="--d:400ms">Room for</span></span>
+          <span class="ln"><span style="--d:550ms"><em>one thought</em></span></span>
+          <span class="ln"><span style="--d:700ms">at a time.</span></span>
+        </h1>
+        <p class="sub">Serein is a focus practice, not another meditation app. Twelve guided minutes, then a dim screen and a timer that asks nothing of you.</p>
+        <div class="actions">
+          <a class="btn-primary" href="#sessions">
+            Start a session
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn-ghost" href="#sounds">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1" opacity=".55"/><path d="M8 6.8 14 10l-6 3.2z" fill="currentColor"/></svg>
+            Hear a sample · 0:40
+          </a>
+        </div>
+      </div>
+
+      <aside class="breath" aria-label="Breath pacing preview">
+        <div class="ring">
+          <svg viewBox="0 0 240 240" aria-hidden="true">
+            <circle class="track" cx="120" cy="120" r="112"></circle>
+            <circle class="arc" id="breathArc" cx="120" cy="120" r="112"></circle>
+          </svg>
+          <div class="ring-inner" aria-hidden="true">
+            <b id="breathLabel">4 seconds</b>
+            <strong id="breathPhase">Inhale</strong>
+          </div>
+          <span class="sr-only">A paced breath preview: four seconds in, six seconds out.</span>
+        </div>
+        <p class="breath-note">Still water · 12 minutes</p>
+      </aside>
+    </main>
+
+    <footer class="strip">
+      <span>Lisbon <span id="localTime">21:04</span> local</span>
+      <span class="mid">38,000 quiet hours logged</span>
+      <span>iOS · Android · No account</span>
+    </footer>
+  </div>
+
+  <div class="menu" id="menu" aria-hidden="true">
+    <div class="menu__top">
+      <span class="brand" aria-hidden="true">Serein<sup>®</sup></span>
+      <button class="menu__close" id="menuClose" aria-label="Close menu">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 1l12 12M13 1 1 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div>
+      <nav class="menu__links" aria-label="Mobile">
+        <a href="#sessions" style="--i:0"><span>01</span>Sessions</a>
+        <a href="#method" style="--i:1"><span>02</span>Method</a>
+        <a href="#sounds" style="--i:2"><span>03</span>Sounds</a>
+        <a href="#journal" style="--i:3"><span>04</span>Journal</a>
+      </nav>
+      <div class="menu__foot">
+        <span>Lisbon · 21:04</span>
+        <span>Begin a session</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add('js-video');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* local time */
+  var timeEl = document.getElementById('localTime');
+  function setTime() {
+    try {
+      var t = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Lisbon'
+      }).format(new Date());
+      if (timeEl && t) timeEl.textContent = t;
+    } catch (e) {}
+  }
+  setTime();
+  setInterval(setTime, 20000);
+
+  /* video: fade loop + settle */
+  var video = document.getElementById('heroVideo');
+  if (video) {
+    video.muted = true;
+    video.playsInline = true;
+    var raf = 0, gapTimer = 0, fadingOut = false;
+
+    function fadeTo(target, ms) {
+      cancelAnimationFrame(raf);
+      var from = parseFloat(video.style.opacity);
+      if (isNaN(from)) from = 0;
+      var t0 = performance.now();
+      (function tick(now) {
+        var p = Math.min((now - t0) / ms, 1);
+        video.style.opacity = String(from + (target - from) * p);
+        if (p < 1) raf = requestAnimationFrame(tick);
+      })(t0);
+    }
+
+    function start() {
+      fadingOut = false;
+      video.classList.add('is-ready');
+      if (reduce.matches) { video.style.opacity = '1'; video.pause(); return; }
+      video.play().catch(function () { video.style.opacity = '1'; });
+      fadeTo(1, 900);
+    }
+
+    video.addEventListener('loadeddata', start, { once: true });
+    if (video.readyState >= 2) start();
+
+    video.addEventListener('timeupdate', function () {
+      var left = video.duration - video.currentTime;
+      if (!fadingOut && left > 0 && left <= 0.55) { fadingOut = true; fadeTo(0, 500); }
+    });
+    video.addEventListener('ended', function () {
+      cancelAnimationFrame(raf);
+      video.style.opacity = '0';
+      gapTimer = setTimeout(function () {
+        video.currentTime = 0;
+        video.play().catch(function () {});
+        start();
+      }, 120);
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (reduce.matches) return;
+          if (e.isIntersecting) video.play().catch(function () {});
+          else video.pause();
+        });
+      }).observe(video);
+    }
+  }
+
+  /* breath ring */
+  var arc = document.getElementById('breathArc');
+  var label = document.getElementById('breathLabel');
+  var phase = document.getElementById('breathPhase');
+  var C = 2 * Math.PI * 112;
+  var IN = 4000, OUT = 6000, T = IN + OUT;
+  var t0 = performance.now();
+  var smooth = function (v) { return v * v * (3 - 2 * v); };
+
+  if (arc && label && phase) {
+    if (reduce.matches) {
+      arc.style.strokeDashoffset = String(C * 0.34);
+      label.textContent = '4 seconds';
+      phase.textContent = 'Inhale';
+    } else {
+      (function loop(now) {
+        var t = (now - t0) % T;
+        var inhale = t < IN;
+        var p = smooth(inhale ? t / IN : (t - IN) / OUT);
+        var v = inhale ? p : 1 - p;
+        arc.style.strokeDashoffset = String(C * (1 - v));
+        var count = inhale ? '4 seconds' : '6 seconds';
+        var word = inhale ? 'Inhale' : 'Exhale';
+        if (label.textContent !== count) label.textContent = count;
+        if (phase.textContent !== word) phase.textContent = word;
+        requestAnimationFrame(loop);
+      })(t0);
+    }
+  }
+
+  /* mobile menu */
+  var menu = document.getElementById('menu');
+  var openBtn = document.getElementById('menuOpen');
+  var closeBtn = document.getElementById('menuClose');
+
+  function setMenu(open) {
+    if (!menu) return;
+    menu.dataset.open = open ? 'true' : 'false';
+    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (openBtn) openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) { var l = menu.querySelector('.menu__links a'); if (l) l.focus({ preventScroll: true }); }
+    else if (openBtn) openBtn.focus({ preventScroll: true });
+  }
+  if (openBtn) openBtn.addEventListener('click', function () { setMenu(true); });
+  if (closeBtn) closeBtn.addEventListener('click', function () { setMenu(false); });
+  if (menu) menu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { setMenu(false); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && menu && menu.dataset.open === 'true') setMenu(false);
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 860 && menu && menu.dataset.open === 'true') setMenu(false);
+  });
+})();
+</script>
+</body>
+</html>

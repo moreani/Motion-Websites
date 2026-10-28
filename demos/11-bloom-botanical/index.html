@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orris — Every bloom begins as a sentence</title>
+<meta name="description" content="Orris is an AI botanical studio. Describe the flower you can almost see and it grows into a species-accurate study, ready for print, perfume or planting.">
+<meta name="theme-color" content="#f6f4ec">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23f6f4ec'/%3E%3Cpath d='M16 6c5 4.5 7.5 8 7.5 11.5A7.5 7.5 0 0 1 16 25a7.5 7.5 0 0 1-7.5-7.5C8.5 14 11 10.5 16 6Z' fill='%234b6047'/%3E%3Cpath d='M16 10v13' stroke='%23f6f4ec' stroke-width='1.1' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@300..600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+html,body{background:#f6f4ec;color:#1a211a}
+:root{
+  --bg:#f6f4ec;
+  --paper:#fbfaf5;
+  --ink:#1a211a;
+  --ink-72:rgba(26,33,26,.72);
+  --ink-56:rgba(26,33,26,.56);
+  --ink-40:rgba(26,33,26,.40);
+  --line:rgba(26,33,26,.15);
+  --line-soft:rgba(26,33,26,.075);
+  --sage:#4b6047;
+  --sage-tint:#eaeddf;
+  --sage-band:#eef0e4;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease-out-expo:cubic-bezier(.16,1,.3,1);
+  --ease-out-quint:cubic-bezier(.22,1,.36,1);
+  --ease-material:cubic-bezier(.4,0,.2,1);
+  --gutter:clamp(20px,4.6vw,64px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:clip;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--sans);
+  font-size:16px;
+  font-weight:400;
+  line-height:1.55;
+  letter-spacing:-.011em;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+img,video,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+h1,h2,h3,p,figure,dl,dd{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+::selection{background:rgba(75,96,71,.22);color:#111a10}
+:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:4px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.skip{
+  position:fixed;left:16px;top:-64px;z-index:120;
+  padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--bg);
+  font-size:13px;font-weight:500;transition:top .25s var(--ease-material);
+}
+.skip:focus-visible{top:16px;outline-color:var(--sage)}
+
+/* ---------- grain ---------- */
+.grain{
+  position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.45;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.075'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+  mix-blend-mode:multiply;
+}
+
+/* ---------- header ---------- */
+.top{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  display:flex;align-items:center;gap:clamp(16px,3vw,40px);
+  padding:16px var(--gutter) 22px;
+  background:linear-gradient(to bottom,rgba(246,244,236,.94) 0%,rgba(246,244,236,.72) 62%,rgba(246,244,236,0) 100%);
+}
+.brand{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--serif);font-size:25px;font-weight:400;line-height:1;
+  letter-spacing:-.025em;color:var(--ink);
+}
+.brand svg{width:17px;height:17px;color:var(--sage);flex:none}
+.brand sup{font-family:var(--sans);font-size:8px;font-weight:500;letter-spacing:0;transform:translateY(-6px);color:var(--ink-56)}
+.nav{
+  display:flex;align-items:center;gap:clamp(18px,2.4vw,34px);
+  margin-left:auto;
+}
+.nav a{
+  position:relative;padding:6px 0;
+  font-size:13.5px;font-weight:400;letter-spacing:-.005em;color:var(--ink-72);
+  transition:color .25s var(--ease-material);
+}
+.nav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease-out-quint);
+}
+.nav a:hover{color:var(--ink)}
+.nav a:hover::after{transform:scaleX(1)}
+.top__cta{
+  display:inline-flex;align-items:center;gap:10px;height:40px;padding:5px 5px 5px 20px;
+  border-radius:999px;background:var(--ink);color:var(--bg);
+  font-size:13.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;
+  transition:transform .25s var(--ease-out-quint),background-color .25s var(--ease-material);
+}
+.top__cta span.chip{
+  width:30px;height:30px;border-radius:999px;display:grid;place-items:center;
+  background:rgba(251,250,245,.14);
+}
+.top__cta svg{width:12px;height:12px;transition:transform .3s var(--ease-out-quint)}
+.top__cta:hover{background:#26331f}
+.top__cta:hover svg{transform:translate(1px,-1px)}
+.top__cta:active{transform:scale(.98)}
+
+.burger{
+  display:none;width:44px;height:44px;margin-left:auto;border:1px solid var(--line);border-radius:999px;
+  background:rgba(251,250,245,.6);cursor:pointer;place-content:center;gap:5px;
+}
+.burger span{display:block;width:18px;height:1.5px;background:var(--ink);border-radius:2px;
+  transition:transform .3s var(--ease-out-quint),opacity .2s ease}
+.menu-open .burger span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.menu-open .burger span:nth-child(2){opacity:0}
+.menu-open .burger span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+.menu{
+  position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;justify-content:center;gap:6px;
+  padding:max(92px,calc(env(safe-area-inset-top) + 80px)) var(--gutter) max(36px,env(safe-area-inset-bottom));
+  background:rgba(26,33,26,.965);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  opacity:0;visibility:hidden;transition:opacity .32s ease,visibility 0s linear .32s;
+}
+.menu-open .menu{opacity:1;visibility:visible;transition:opacity .32s ease}
+.menu a.menu__link{
+  display:block;padding:9px 0;color:var(--bg);
+  font-family:var(--serif);font-size:clamp(30px,9vw,40px);font-weight:400;line-height:1.15;letter-spacing:-.02em;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .5s var(--ease-out-expo),transform .5s var(--ease-out-expo);
+}
+.menu-open .menu a.menu__link{opacity:1;transform:none;transition-delay:calc(90ms + var(--i) * 70ms)}
+.menu__foot{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px 24px;font-size:12.5px;color:rgba(246,244,236,.6)}
+body.menu-open{overflow:hidden}
+@media (max-width:900px){
+  .nav,.top__cta{display:none}
+  .burger{display:grid}
+}
+@media (min-width:901px){.menu{display:none}}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;
+  padding:clamp(92px,12vh,120px) var(--gutter) 0;
+}
+.hero__grid{
+  flex:1;
+  display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);
+  align-items:center;gap:clamp(32px,5vw,72px);
+  padding-block:clamp(20px,4vh,48px);
+}
+.hero__copy{max-width:640px}
+
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:500;line-height:1.2;letter-spacing:.19em;text-transform:uppercase;color:var(--ink-56);
+}
+.eyebrow i{
+  width:6px;height:6px;border-radius:50%;background:var(--sage);flex:none;
+}
+h1{
+  margin-top:clamp(18px,2.6vh,28px);
+  font-family:var(--serif);font-optical-sizing:auto;
+  font-weight:300;
+  font-size:clamp(42px,5.55vw,84px);
+  line-height:.98;
+  letter-spacing:-.032em;
+  color:var(--ink);
+}
+.line{display:block;overflow:hidden;padding:.055em .14em .13em;margin:-.055em -.14em -.13em}
+.line__in{display:block;animation:line-rise 1s var(--ease-out-expo) var(--d,0s) both}
+h1 em{
+  font-style:italic;font-weight:300;color:var(--sage);letter-spacing:-.036em;
+}
+@keyframes line-rise{
+  from{opacity:0;transform:translateY(112%)}
+  to{opacity:1;transform:none}
+}
+@keyframes fade-soft{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+.sub{
+  margin-top:clamp(20px,2.6vh,28px);
+  max-width:31rem;
+  font-size:clamp(14.5px,1.24vw,16.5px);font-weight:400;line-height:1.62;letter-spacing:-.008em;
+  color:var(--ink-72);
+}
+.actions{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:clamp(24px,3.4vh,36px);
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  height:48px;padding:0 24px;border-radius:999px;border:1px solid transparent;
+  font-size:14px;font-weight:500;letter-spacing:-.012em;white-space:nowrap;cursor:pointer;
+  transition:transform .25s var(--ease-out-quint),background-color .25s var(--ease-material),border-color .25s var(--ease-material),color .25s;
+}
+.btn:active{transform:scale(.98)}
+.btn--primary{background:#1e2a1d;color:var(--paper);padding-right:7px}
+.btn--primary .btn__chip{
+  width:34px;height:34px;border-radius:999px;display:grid;place-items:center;
+  background:rgba(251,250,245,.14);transition:transform .3s var(--ease-out-quint);
+}
+.btn--primary svg{width:13px;height:13px}
+.btn--primary:hover{background:#2a3926}
+.btn--primary:hover .btn__chip{transform:translate(1px,-1px)}
+.btn--ghost{border-color:var(--line);color:var(--ink);background:transparent}
+.btn--ghost:hover{background:rgba(26,33,26,.05);border-color:rgba(26,33,26,.28)}
+.btn--ghost svg{width:11px;height:11px;color:var(--ink-56);transition:transform .3s var(--ease-out-quint),color .3s}
+.btn--ghost:hover svg{transform:translate(2px,-2px);color:var(--ink)}
+
+.micro{
+  margin-top:14px;font-size:11.5px;line-height:1.5;letter-spacing:.01em;color:var(--ink-40);
+}
+
+/* ---------- plate ---------- */
+.plate{
+  position:relative;justify-self:end;
+  width:100%;max-width:560px;
+}
+.plate__frame{
+  position:relative;width:100%;aspect-ratio:4/5;max-height:calc(100dvh - 320px);
+  overflow:hidden;border-radius:999px 999px 24px 24px;background:#dfe2d3;
+  clip-path:inset(0 0 0 0 round 999px 999px 24px 24px);
+}
+.plate__frame img,.plate__frame video{
+  width:100%;height:100%;object-fit:cover;object-position:50% 56%;
+  transform:scale(1.08);
+}
+html.js .plate__frame{
+  opacity:0;transform:translateY(16px);
+  clip-path:inset(58% 25% 0 25% round 220px 220px 24px 24px);
+}
+html.js .plate__frame.is-in{
+  opacity:1;transform:none;
+  clip-path:inset(0 0 0 0 round 999px 999px 24px 24px);
+  transition:clip-path 1.55s var(--ease-out-expo),opacity .7s ease,transform 1.35s var(--ease-out-expo);
+}
+html.js .plate__frame.is-in img{transition:transform 2.2s var(--ease-out-expo)}
+.plate__frame.is-in img{transform:none}
+.plate__edge{
+  position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(26,33,26,.1),inset 0 -60px 90px -60px rgba(20,26,18,.5);
+}
+
+.thumb{
+  position:absolute;left:clamp(-52px,-3vw,-24px);bottom:clamp(22px,4vh,44px);
+  width:clamp(112px,13.5vw,168px);
+  padding:6px 6px 8px;border-radius:16px;background:var(--paper);
+  box-shadow:0 18px 44px rgba(26,33,26,.2),0 2px 6px rgba(26,33,26,.08);
+  clip-path:inset(0 0 0 0 round 16px);
+}
+html.js .thumb{opacity:0;transform:translateY(18px);clip-path:inset(100% 0 0 0 round 16px)}
+html.js .thumb.is-in{
+  opacity:1;transform:none;clip-path:inset(0 0 0 0 round 16px);
+  transition:clip-path 1.15s var(--ease-out-expo),opacity .7s ease,transform 1s var(--ease-out-expo);
+}
+.thumb img,.thumb video{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:50% 60%;border-radius:11px;background:#101510}
+.thumb figcaption{
+  padding:7px 3px 0;font-size:8.5px;line-height:1.3;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-56);
+}
+
+.plate__cap{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-top:14px;padding-top:11px;border-top:1px solid var(--line);
+  font-size:9.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-56);
+}
+.plate__cap span:last-child{color:var(--ink-40);white-space:nowrap}
+
+/* ---------- hero foot ---------- */
+.hero__foot{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:15px 0 max(20px,env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);
+}
+.stats{display:flex;align-items:baseline;gap:clamp(20px,3.4vw,48px);flex-wrap:wrap}
+.stat{display:flex;align-items:baseline;gap:9px}
+.stat + .stat{border-left:1px solid var(--line);padding-left:clamp(20px,3.4vw,48px)}
+.stat b{
+  font-family:var(--serif);font-optical-sizing:auto;font-weight:300;font-size:24px;line-height:1;letter-spacing:-.03em;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.stat span{font-size:11px;line-height:1.35;letter-spacing:.01em;color:var(--ink-56)}
+.cue{
+  display:inline-flex;align-items:center;gap:9px;flex:none;
+  font-size:9.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-56);
+  transition:color .25s var(--ease-material);
+}
+.cue svg{width:13px;height:13px;transition:transform .35s var(--ease-out-quint)}
+.cue:hover{color:var(--ink)}
+.cue:hover svg{transform:translateY(3px)}
+
+/* ---------- capabilities band ---------- */
+.band{
+  position:relative;z-index:2;
+  background:var(--sage-band);
+  border-top:1px solid rgba(26,33,26,.16);
+  padding:clamp(56px,9vh,104px) var(--gutter) clamp(48px,7vh,80px);
+}
+.band__inner{
+  display:grid;grid-template-columns:4fr 5fr 3fr;gap:clamp(28px,3.4vw,52px);
+  align-items:start;
+}
+.label{
+  display:flex;align-items:center;gap:10px;
+  font-size:9.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-56);
+}
+.label::before{content:"";width:26px;height:1px;background:var(--ink-40)}
+.band h2{
+  margin-top:16px;
+  font-family:var(--serif);font-optical-sizing:auto;font-weight:300;
+  font-size:clamp(26px,2.9vw,40px);line-height:1.1;letter-spacing:-.028em;color:var(--ink);
+  max-width:16ch;
+}
+.band h2 em{font-style:italic;color:var(--sage)}
+.band__note{
+  margin-top:16px;max-width:32ch;font-size:13px;line-height:1.62;color:var(--ink-72);
+}
+.caps{border-top:1px solid var(--line)}
+.cap{
+  display:grid;grid-template-columns:26px minmax(0,1fr) 16px;gap:14px;align-items:start;
+  padding:20px 0;border-bottom:1px solid var(--line);
+}
+.cap__n{font-size:9.5px;font-weight:500;letter-spacing:.14em;color:var(--ink-40);padding-top:5px}
+.cap h3{
+  font-family:var(--serif);font-optical-sizing:auto;font-weight:400;
+  font-size:20px;line-height:1.15;letter-spacing:-.02em;color:var(--ink);
+  transition:color .25s var(--ease-material);
+}
+.cap p{margin-top:6px;font-size:13px;line-height:1.55;color:var(--ink-72);max-width:38ch}
+.cap svg{width:14px;height:14px;margin-top:6px;color:var(--ink-40);transition:transform .35s var(--ease-out-quint),color .25s}
+.cap:hover h3{color:var(--sage)}
+.cap:hover svg{transform:translate(3px,-3px);color:var(--sage)}
+
+.band__fig{margin:0;width:100%;align-self:start}
+.band__fig .fig__frame{
+  position:relative;overflow:hidden;border-radius:16px;background:#dbddcf;
+  aspect-ratio:3/4;clip-path:inset(0 0 0 0 round 16px);
+}
+.band__fig img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-out-expo)}
+.band__fig:hover img{transform:scale(1.04)}
+html.js .band__fig .fig__frame{clip-path:inset(100% 0 0 0 round 16px)}
+html.js .band__fig .fig__frame.is-in{clip-path:inset(0 0 0 0 round 16px);transition:clip-path 1.2s var(--ease-out-expo)}
+.band__fig figcaption{
+  display:flex;justify-content:space-between;gap:10px;margin-top:10px;
+  font-size:8.5px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-56);
+}
+.band__fig figcaption span:last-child{color:var(--ink-40)}
+
+/* scroll reveal for band rows */
+html.js .reveal{opacity:0;transform:translateY(18px)}
+html.js .reveal.is-in{opacity:1;transform:none;transition:opacity .8s var(--ease-out-expo),transform .8s var(--ease-out-expo);transition-delay:var(--rd,0s)}
+
+/* ---------- footer ---------- */
+.foot{
+  border-top:1px solid var(--line);background:var(--bg);
+  padding:22px var(--gutter) max(26px,env(safe-area-inset-bottom));
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px;
+}
+.foot__brand{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-size:19px;letter-spacing:-.02em}
+.foot__brand svg{width:14px;height:14px;color:var(--sage)}
+.foot p{font-size:11.5px;line-height:1.5;color:var(--ink-56)}
+.foot nav{display:flex;flex-wrap:wrap;gap:18px;font-size:11.5px;color:var(--ink-56)}
+.foot nav a:hover{color:var(--ink)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .hero__grid{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:32px}
+  .band__inner{grid-template-columns:5fr 7fr;grid-template-areas:"head body" "fig fig"}
+  .band__inner>.band__head{grid-area:head}
+  .band__rows{grid-area:body}
+  .band__fig{grid-area:fig;max-width:320px;margin-top:8px}
+}
+@media (max-width:860px){
+  .hero{padding-top:88px}
+  .hero__grid{grid-template-columns:1fr;gap:clamp(28px,5vh,44px);align-items:start;padding-block:8px 28px}
+  .plate{justify-self:start;max-width:100%}
+  .plate__frame{aspect-ratio:5/6;max-height:none}
+  .plate__cap{margin-top:12px}
+  .thumb{left:auto;right:12px;bottom:12px;width:118px}
+  .hero__foot{flex-direction:column;align-items:flex-start;gap:14px;padding-bottom:24px}
+  .cue{display:none}
+  .band__inner{grid-template-columns:1fr;grid-template-areas:"head" "body" "fig";gap:32px}
+  .band__fig{max-width:280px}
+  .band h2{max-width:20ch}
+}
+@media (max-width:560px){
+  .actions .btn{width:100%}
+  .actions{gap:8px}
+  .stats{gap:14px 18px;width:100%}
+  .stat + .stat{padding-left:18px}
+  .stat b{font-size:21px}
+  .stat span{font-size:10.5px}
+  .plate__frame{aspect-ratio:1/1.12}
+  .plate__cap{font-size:8.5px;letter-spacing:.13em}
+  .plate__cap span:last-child{display:none}
+  .foot{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:400px){
+  .stat:nth-child(2){display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-delay:0s!important;transition-duration:.001s!important;transition-delay:0s!important}
+  html.js .plate__frame,html.js .thumb,html.js .band__fig .fig__frame{opacity:1;transform:none;clip-path:none}
+  html.js .reveal{opacity:1;transform:none}
+  .line__in{transform:none;opacity:1}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="Orris, home">
+    <svg viewBox="0 0 20 20" aria-hidden="true" fill="none"><path d="M10 1.6c4.6 3.9 6.9 7.1 6.9 10.2A6.9 6.9 0 0 1 10 18.7a6.9 6.9 0 0 1-6.9-6.9C3.1 8.7 5.4 5.5 10 1.6Z" fill="currentColor"/><path d="M10 5.4v10.2" stroke="#f6f4ec" stroke-width="1" stroke-linecap="round"/></svg>
+    Orris<sup>®</sup>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#studio">Studio</a>
+    <a href="#capabilities">Specimens</a>
+    <a href="#capabilities">Journal</a>
+    <a href="#studio">Pricing</a>
+  </nav>
+  <a class="top__cta" href="#studio">Start growing <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+  <button class="burger" type="button" aria-controls="mmenu" aria-expanded="false" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="menu" id="mmenu">
+  <nav aria-label="Mobile">
+    <a class="menu__link" href="#studio" style="--i:0">Studio</a>
+    <a class="menu__link" href="#capabilities" style="--i:1">Specimens</a>
+    <a class="menu__link" href="#capabilities" style="--i:2">Journal</a>
+    <a class="menu__link" href="#studio" style="--i:3">Pricing</a>
+    <a class="menu__link" href="#studio" style="--i:4">Start growing</a>
+  </nav>
+  <p class="menu__foot"><span>Lisbon, 38.72° N</span><span>hello@orris.studio</span></p>
+</div>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow" style="animation:fade-soft .9s var(--ease-out-expo) .12s both"><i aria-hidden="true"></i>AI botanical studio · Lisbon, est. 2024</p>
+        <h1 id="hero-title">
+          <span class="line"><span class="line__in" style="--d:.26s">Every bloom</span></span>
+          <span class="line"><span class="line__in" style="--d:.38s">begins as</span></span>
+          <span class="line"><span class="line__in" style="--d:.5s"><em>a sentence.</em></span></span>
+        </h1>
+        <p class="sub" style="animation:fade-soft 1s var(--ease-out-expo) .78s both">Describe the flower you can almost see. Orris grows it into a living botanical study — petal by petal, colour-true, ready for print or planting.</p>
+        <div class="actions" style="animation:fade-soft 1s var(--ease-out-expo) .9s both">
+          <a class="btn btn--primary" href="#studio">Plant your idea <span class="btn__chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+          <a class="btn btn--ghost" href="#capabilities">View the archive <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+        <p class="micro" style="animation:fade-soft 1s var(--ease-out-expo) 1.02s both">First specimen free · No card · 380 species in the library</p>
+      </div>
+
+      <figure class="plate">
+        <div class="plate__frame" data-reveal>
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png"
+               alt="A dense garden study: orange chrysanthemums, purple salvia and a pale hydrangea against dark foliage" fetchpriority="high" decoding="async">
+          <span class="plate__edge" aria-hidden="true"></span>
+        </div>
+        <div class="thumb">
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png"
+               alt="Close-up botanical study in pink, orange and lilac" loading="lazy" decoding="async">
+          <figcaption>Specimen 04 · 6.2 s</figcaption>
+        </div>
+        <figcaption class="plate__cap"><span>Fig. 04 — Late summer border, 96 words</span><span>Rendered in 6.2 s</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="hero__foot">
+      <div class="stats">
+        <div class="stat"><b>380</b><span>species in the library</span></div>
+        <div class="stat"><b>12,400</b><span>studios growing</span></div>
+        <div class="stat"><b>6.2 s</b><span>average render</span></div>
+      </div>
+      <a class="cue" href="#capabilities">Capabilities <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></a>
+    </div>
+  </section>
+
+  <section class="band" id="capabilities" aria-labelledby="cap-title">
+    <div class="band__inner">
+      <div class="band__head">
+        <p class="label reveal">Capabilities</p>
+        <h2 id="cap-title" class="reveal" style="--rd:.06s">Built for the <em>slow</em> half of design.</h2>
+        <p class="band__note reveal" style="--rd:.12s">Florists, perfumers and print studios come here for a species-accurate starting point — not another mood board.</p>
+      </div>
+
+      <div class="band__rows">
+        <ol class="caps">
+          <li class="cap reveal" style="--rd:.14s">
+            <span class="cap__n">01</span>
+            <div>
+              <h3>Species studies</h3>
+              <p>Render one cultivar at 8k with vein-level detail, true colour, and a note on every petal it invents.</p>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </li>
+          <li class="cap reveal" style="--rd:.2s">
+            <span class="cap__n">02</span>
+            <div>
+              <h3>Living palettes</h3>
+              <p>Point it at a garden, a fabric or a memory; it returns a five-colour story you can mix, print or plant.</p>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </li>
+          <li class="cap reveal" style="--rd:.26s">
+            <span class="cap__n">03</span>
+            <div>
+              <h3>Print and plant</h3>
+              <p>Export studio-ready TIFFs, or order seeds matched to your composition from our growers outside Lisbon.</p>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </li>
+        </ol>
+      </div>
+
+      <figure class="band__fig reveal" style="--rd:.18s">
+        <div class="fig__frame" data-reveal-scroll>
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png" alt="Close botanical study of a ranunculus in soft daylight" loading="lazy" decoding="async">
+        </div>
+        <figcaption><span>Plate 11 — Ranunculus</span><span>1 / 380</span></figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" id="studio">
+    <div class="foot__brand" aria-label="Orris">
+      <svg viewBox="0 0 20 20" aria-hidden="true" fill="none"><path d="M10 1.6c4.6 3.9 6.9 7.1 6.9 10.2A6.9 6.9 0 0 1 10 18.7a6.9 6.9 0 0 1-6.9-6.9C3.1 8.7 5.4 5.5 10 1.6Z" fill="currentColor"/></svg>
+      Orris
+    </div>
+    <p>Botanical design, grown from language. Rua da Boavista 84, Lisbon.</p>
+    <nav aria-label="Footer">
+      <a href="#capabilities">Specimens</a>
+      <a href="#capabilities">Journal</a>
+      <a href="mailto:hello@orris.studio">hello@orris.studio</a>
+      <a href="#top">© 2026</a>
+    </nav>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* hero study reveal */
+  var frame = document.querySelector('.plate__frame');
+  function revealFrame() { if (frame) frame.classList.add('is-in'); }
+  setTimeout(revealFrame, 260);
+  setTimeout(revealFrame, 1800);
+
+  /* living-render loop in the inset card */
+  var loop = document.querySelector('.thumb video');
+  if (loop) {
+    loop.muted = true;
+    loop.playsInline = true;
+    if (reduce) { loop.pause(); }
+    else {
+      loop.play().catch(function () {});
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) loop.play().catch(function () {});
+            else loop.pause();
+          });
+        }, { threshold: 0.1 }).observe(loop);
+      }
+    }
+  }
+
+  /* specimen card */
+  var thumb = document.querySelector('.thumb');
+  if (thumb) setTimeout(function () { thumb.classList.add('is-in'); }, reduce ? 0 : 1050);
+
+  /* scroll reveals */
+  var items = document.querySelectorAll('.reveal, [data-reveal-scroll]');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add('is-in'); });
+  }
+
+  /* mobile menu */
+  var burger = document.querySelector('.burger');
+  var menu = document.getElementById('mmenu');
+  if (burger && menu) {
+    var body = document.body;
+    var isOpen = function () { return body.classList.contains('menu-open'); };
+    var setOpen = function (open) {
+      body.classList.toggle('menu-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      menu.inert = !open;
+      if (open) menu.querySelector('a').focus({ preventScroll: true });
+    };
+    menu.inert = true;
+    burger.addEventListener('click', function () { setOpen(!isOpen()); });
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('a') || e.target === menu) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) { setOpen(false); burger.focus(); }
+    });
+    window.matchMedia('(min-width: 901px)').addEventListener('change', function (e) {
+      if (e.matches) setOpen(false);
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meridian — First cheques for what's next</title>
+<meta name="description" content="Meridian is a $480M early-stage fund in New York and Berlin, writing first cheques into the load-bearing companies the next decade runs on.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{background:#0A0A0A}
+
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --ink:#0A0A0A;
+  --paper:#F2EFE9;
+  --muted:rgba(242,239,233,.56);
+  --faint:rgba(242,239,233,.38);
+  --line:rgba(242,239,233,.16);
+  --line-soft:rgba(242,239,233,.09);
+  --pad:clamp(16px,2.5vw,38px);
+  --ease-out-expo:cubic-bezier(.16,1,.3,1);
+  --ease-out-quint:cubic-bezier(.22,1,.36,1);
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.085'/%3E%3C/svg%3E");
+}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{margin:0;color:var(--paper);font-family:"Inter Tight",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.5;
+  letter-spacing:-.012em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:clip}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,p,figure,blockquote{margin:0;padding:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg{display:block}
+::selection{background:rgba(242,239,233,.22)}
+:focus-visible{outline:1.5px solid var(--paper);outline-offset:4px}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.grain{position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.4;background-image:var(--noise);background-size:200px 200px}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;font-weight:400;letter-spacing:.16em;text-transform:uppercase}
+
+/* ---------- frame ---------- */
+.frame{position:relative;min-height:100vh;min-height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;
+  padding:0 var(--pad)}
+
+.bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(18px,2.4vh,26px) 0 clamp(14px,2vh,22px);
+  border-bottom:1px solid var(--line-soft)}
+.brand{display:inline-flex;align-items:center;gap:9px;font-size:19px;font-weight:500;letter-spacing:-.03em}
+.brand i{width:7px;height:7px;background:var(--paper);display:block;flex:none}
+.brand sup{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.04em;color:var(--faint);align-self:flex-start;margin-top:2px}
+.bar__right{display:flex;align-items:center;gap:clamp(18px,2.6vw,36px)}
+.nav{display:flex;align-items:center;gap:clamp(16px,2.2vw,30px)}
+.nav a{position:relative;font-size:13px;font-weight:400;color:rgba(242,239,233,.78);padding:4px 0;letter-spacing:-.005em;
+  transition:color .25s}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);
+  transform-origin:left;transition:transform .3s var(--ease-out-quint)}
+.nav a:hover{color:var(--paper)}
+.nav a:hover::after{transform:scaleX(1)}
+
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:2px;
+  padding:9px 13px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--paper);transition:background-color .25s,color .25s,border-color .25s}
+.pill svg{width:11px;height:11px;transition:transform .3s var(--ease-out-quint)}
+.pill:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.pill:hover svg{transform:translate(2px,-2px)}
+
+/* ---------- field ---------- */
+.field{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);align-items:end;
+  gap:clamp(24px,4vw,72px);padding:clamp(20px,3vh,34px) 0 clamp(26px,4vh,44px);min-height:0}
+.field__meta{grid-column:1/-1;grid-row:1}
+.field h1{grid-column:1;grid-row:2}
+.field .aside{grid-column:2;grid-row:2}
+.corner{position:absolute;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.corner::before{content:"";width:5px;height:5px;background:rgba(242,239,233,.5);flex:none}
+.corner--tl{top:clamp(16px,2.4vh,26px);left:0}
+.corner--tr{top:clamp(16px,2.4vh,26px);right:0;text-align:right;flex-direction:row-reverse}
+.corner--bl{bottom:0;left:0}
+.corner--br{bottom:0;right:0;flex-direction:row-reverse}
+
+h1{font-size:clamp(36px,10.6vh,102px);line-height:.92;letter-spacing:-.045em;font-weight:400;margin-top:auto}
+.ml{display:block;overflow:hidden;padding:.04em .1em .1em;margin:-.04em -.1em -.1em}
+.ml > span{display:block;white-space:nowrap}
+
+.aside{border-top:1px solid var(--line);padding-top:14px;max-width:300px;justify-self:end;width:100%}
+.aside .mono{color:var(--faint)}
+.aside p{margin-top:12px;font-size:14.5px;line-height:1.56;color:var(--muted);letter-spacing:-.005em;max-width:34ch}
+.aside__actions{display:flex;align-items:center;gap:18px;margin-top:20px;flex-wrap:wrap}
+.solid{display:inline-flex;align-items:center;gap:9px;background:var(--paper);color:var(--ink);border-radius:2px;
+  padding:12px 16px;font-size:13px;font-weight:500;letter-spacing:-.005em;
+  transition:transform .25s var(--ease-out-quint),background-color .25s}
+.solid svg{width:12px;height:12px;transition:transform .3s var(--ease-out-quint)}
+.solid:hover{background:#fff;transform:translateY(-1px)}
+.solid:hover svg{transform:translate(2px,-2px)}
+.solid:active{transform:scale(.985)}
+.link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:rgba(242,239,233,.72);
+  border-bottom:1px solid rgba(242,239,233,.22);padding-bottom:2px;transition:color .25s,border-color .25s}
+.link svg{width:10px;height:10px;transition:transform .3s var(--ease-out-quint)}
+.link:hover{color:var(--paper);border-color:rgba(242,239,233,.6)}
+.link:hover svg{transform:translate(1.5px,-1.5px)}
+
+/* ---------- plate ---------- */
+.plate{position:relative;overflow:hidden;background:#111;border-top:1px solid var(--line);
+  height:clamp(160px,25vh,286px);margin:0 calc(-1 * var(--pad))}
+.plate__video{width:100%;height:100%;object-fit:cover;object-position:center 46%;
+  filter:grayscale(1) contrast(1.08) brightness(.86);transform:scale(1.02);transition:opacity .6s var(--ease-out-expo),transform 1.8s var(--ease-out-expo)}
+.plate__video.is-settling{transform:scale(1.05)}
+.plate__cap{position:absolute;left:var(--pad);right:var(--pad);bottom:11px;display:flex;justify-content:space-between;gap:16px;
+  color:rgba(242,239,233,.72);text-shadow:0 1px 12px rgba(0,0,0,.6)}
+.plate__cap .mono{font-size:9.5px;letter-spacing:.15em}
+.plate__noise{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background-image:var(--noise)}
+
+/* ---------- ticker ---------- */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line-soft);overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.ticker__track{display:flex;align-items:center;width:max-content;animation:ticker 46s linear infinite}
+.ticker:hover .ticker__track{animation-play-state:paused}
+.ticker__row{display:flex;align-items:center;gap:2.2rem;padding:15px 1.1rem 15px 0}
+.ticker__row span{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:rgba(242,239,233,.6);white-space:nowrap}
+.ticker__row span b{font-weight:500;color:rgba(242,239,233,.9)}
+.ticker__row i{width:3px;height:3px;background:rgba(242,239,233,.3);flex:none;font-style:normal}
+@keyframes ticker{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+
+/* ---------- entrance ---------- */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes lineUp{from{transform:translateY(112%)}to{transform:translateY(0)}}
+.in-down{animation:fadeDown .8s var(--ease-out-expo) both}
+.in-fade{animation:fadeUp .9s var(--ease-out-expo) both}
+.ml > span{animation:lineUp 1.05s var(--ease-out-quint) both;animation-delay:calc(.22s + var(--i) * .11s)}
+.enter{animation-play-state:paused}
+.fonts-ready .enter{animation-play-state:running}
+
+/* ---------- responsive ---------- */
+@media (min-width:901px){
+  html,body{height:100%;overflow:hidden}
+}
+@media (min-width:901px) and (max-height:780px){
+  h1{font-size:clamp(34px,9.4vh,88px)}
+  .aside p{font-size:13.5px;margin-top:10px}
+  .aside__actions{margin-top:14px}
+  .plate{height:clamp(140px,22vh,220px)}
+}
+@media (max-height:640px) and (min-width:901px){
+  .corner--bl,.corner--br{display:none}
+}
+
+@media (max-width:900px){
+  .frame{min-height:100dvh;grid-template-rows:auto auto auto auto auto}
+  .bar{border-bottom:1px solid var(--line-soft)}
+  .nav{display:none}
+  .field{grid-template-columns:minmax(0,1fr);align-items:start;gap:0;
+    padding:14px 0 clamp(22px,4vh,32px)}
+  .field h1{grid-column:1;grid-row:2}
+  .field .aside{grid-column:1;grid-row:3}
+  .corner{position:static;font-size:9px;letter-spacing:.14em}
+  .corner--tr{justify-content:flex-end}
+  .corner--bl,.corner--br{display:none}
+  .field__meta{display:flex;justify-content:space-between;gap:12px;padding-bottom:clamp(20px,4vh,34px)}
+  .corner--tl,.corner--tr{position:static}
+  h1{font-size:clamp(35px,11vw,58px);line-height:.95;letter-spacing:-.045em;margin-top:0}
+  .ml{padding:.04em .08em .12em;margin:-.04em -.08em -.12em}
+  .aside{margin-top:clamp(22px,4vh,30px);max-width:none;justify-self:stretch;padding-top:12px}
+  .aside p{max-width:38ch}
+  .aside__actions{margin-top:18px}
+  .plate{height:clamp(190px,26vh,260px);margin:0 calc(-1 * var(--pad))}
+  .plate__cap{font-size:9px;bottom:9px}
+  .plate__cap .mono{font-size:8.5px;letter-spacing:.12em}
+  .ticker__row{padding:13px .9rem 13px 0;gap:1.6rem}
+  .foot{padding-bottom:max(16px,env(safe-area-inset-bottom))}
+}
+@media (max-width:430px){
+  h1{font-size:clamp(33px,10.4vw,44px)}
+  .aside p{font-size:14px}
+  .brand{font-size:17.5px}
+  .pill{padding:8px 11px;font-size:9.5px}
+  .solid{width:100%;justify-content:space-between}
+  .aside__actions{gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .in-down,.in-fade,.ml > span,.ticker__track{animation:none}
+  .plate__video{transition:none}
+  .enter{animation-play-state:running}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="frame">
+  <header class="bar">
+    <a class="brand in-down enter" style="--d:40ms" href="#top" aria-label="Meridian, home"><i aria-hidden="true"></i>Meridian<sup>®</sup></a>
+    <div class="bar__right">
+      <nav class="nav in-down enter" style="--d:120ms" aria-label="Primary">
+        <a href="#thesis">Thesis</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#team">Team</a>
+        <a href="#letters">Letters</a>
+      </nav>
+      <a class="pill in-down enter" style="--d:200ms" href="#pitch">Pitch us
+        <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M4.2 2.5h5.3v5.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <section class="field" id="top" aria-labelledby="hero-title">
+    <div class="field__meta" aria-hidden="true">
+      <p class="corner corner--tl mono in-fade enter" style="--d:520ms">Fund IV — $480m committed</p>
+      <p class="corner corner--tr mono in-fade enter" style="--d:600ms">New York / Berlin · Est. 2016</p>
+    </div>
+
+    <h1 id="hero-title">
+      <span class="ml"><span class="enter" style="--i:0">We back first</span></span>
+      <span class="ml"><span class="enter" style="--i:1">versions of</span></span>
+      <span class="ml"><span class="enter" style="--i:2">what’s next.</span></span>
+    </h1>
+
+    <div class="aside in-fade enter" style="--d:780ms" id="thesis">
+      <p class="mono">Thesis · 01</p>
+      <p>A $480M early-stage fund writing first cheques into the load-bearing parts of the economy — grid, freight, materials, cold chain.</p>
+      <div class="aside__actions">
+        <a class="solid" href="#thesis">Read the thesis
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M4.2 2.5h5.3v5.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
+        </a>
+        <a class="link" href="#team">Meet the partners
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M4.2 2.5h5.3v5.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <p class="corner corner--bl mono in-fade enter" style="--d:660ms" aria-hidden="true">32 companies · 61% follow-on</p>
+    <p class="corner corner--br mono in-fade enter" style="--d:700ms" aria-hidden="true">Plate 01</p>
+  </section>
+
+  <figure class="plate">
+    <video class="plate__video" id="plate-video" autoplay muted loop playsinline preload="auto" aria-hidden="true"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"></video>
+    <div class="plate__noise" aria-hidden="true"></div>
+    <figcaption class="plate__cap">
+      <span class="mono">Skyline study, plate 01</span>
+      <span class="mono">New York — 40.7128° N</span>
+    </figcaption>
+  </figure>
+
+  <div class="ticker" id="portfolio" aria-label="Portfolio companies">
+    <div class="ticker__track">
+      <div class="ticker__row">
+        <span><b>Arcwell</b> — grid software · Series A</span><i></i>
+        <span><b>Portico</b> — modular housing · Seed</span><i></i>
+        <span><b>Flint &amp; Co</b> — industrial chemistry · Series B</span><i></i>
+        <span><b>Northbeam</b> — cold chain · Series A</span><i></i>
+        <span><b>Kestrel</b> — freight ops · Seed</span><i></i>
+        <span><b>Tallow</b> — low-carbon materials · Series A</span><i></i>
+        <span><b>Northgate Works</b> — water infra · Series B</span><i></i>
+        <span><b>Halden</b> — field robotics · Seed</span><i></i>
+      </div>
+      <div class="ticker__row" aria-hidden="true">
+        <span><b>Arcwell</b> — grid software · Series A</span><i></i>
+        <span><b>Portico</b> — modular housing · Seed</span><i></i>
+        <span><b>Flint &amp; Co</b> — industrial chemistry · Series B</span><i></i>
+        <span><b>Northbeam</b> — cold chain · Series A</span><i></i>
+        <span><b>Kestrel</b> — freight ops · Seed</span><i></i>
+        <span><b>Tallow</b> — low-carbon materials · Series A</span><i></i>
+        <span><b>Northgate Works</b> — water infra · Series B</span><i></i>
+        <span><b>Halden</b> — field robotics · Seed</span><i></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var go = function () { root.classList.add('fonts-ready'); };
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(go); }
+  setTimeout(go, 1100);
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var video = document.getElementById('plate-video');
+
+  if (video) {
+    if (reduce) {
+      video.removeAttribute('autoplay');
+      video.pause();
+      video.removeAttribute('loop');
+    } else {
+      // Fade the plate in on first frame; if the network stalls, keep the frame visible.
+      if (video.readyState < 3) { video.style.opacity = '0'; }
+      video.classList.add('is-settling');
+      var show = function () {
+        video.style.opacity = '1';
+        video.classList.remove('is-settling');
+      };
+      video.addEventListener('loadeddata', show, { once: true });
+      video.addEventListener('playing', show, { once: true });
+      setTimeout(show, 2600);
+      var play = video.play();
+      if (play && typeof play.catch === 'function') { play.catch(function () {}); }
+    }
+  }
+})();
+</script>
+</body>
+</html>
