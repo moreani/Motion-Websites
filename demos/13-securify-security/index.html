@@ -124,6 +124,14 @@
     display:flex;align-items:center;gap:14px;
     padding:18px var(--gutter);
   }
+  .nav-shell::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:128px;z-index:-1;pointer-events:none;
+    background:linear-gradient(180deg,
+      rgb(5 8 12 / .96) 0%, rgb(5 8 12 / .8) 42%, rgb(5 8 12 / .38) 72%, rgb(5 8 12 / 0) 100%);
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    -webkit-mask-image:linear-gradient(#000 55%,transparent 100%);
+            mask-image:linear-gradient(#000 55%,transparent 100%);
+  }
   .brand{
     display:inline-flex;align-items:center;gap:9px;text-decoration:none;
     padding:9px 16px 9px 13px;border-radius:999px;flex:none;
@@ -396,7 +404,7 @@
   .attest__note{margin:0;font-size:12px;color:var(--faint);letter-spacing:-.004em}
 
   /* ---------- proof band ---------- */
-  .proof{position:relative;z-index:2;padding:clamp(48px,7vh,76px) 0 0;border-top:1px solid var(--hair)}
+  .proof{position:relative;z-index:2;padding-top:clamp(48px,7vh,76px);border-top:1px solid var(--hair)}
   .proof__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.15fr);gap:clamp(20px,3vw,48px);align-items:start}
   .proof__item{border-top:1px solid var(--line);padding-top:16px}
   .proof__num{
@@ -453,8 +461,11 @@
     .attest__marks span{padding:0 12px}
     .attest__marks span:first-child{padding-left:0}
     .attest__note{max-width:32ch;line-height:1.5}
-    .proof__grid{grid-template-columns:1fr 1fr}
-    .proof__num{font-size:26px}
+    .proof__grid{grid-template-columns:1fr;gap:0}
+    .proof__item{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:15px 0}
+    .proof__num{font-size:28px}
+    .proof__lbl{margin-top:0;text-align:right;max-width:52%}
+    .proof__note{margin-top:6px}
   }
   @media (max-width:430px){
     .brand__word{font-size:13px}
@@ -624,7 +635,7 @@
 
     <div class="wrap">
       <div class="attest appear appear--fade" id="trust" style="--d:1.2s">
-        <div class="attest__marks" aria-label="Certifications">
+        <div class="attest__marks">
           <span>SOC 2 Type II</span>
           <span>ISO 27001</span>
           <span>HIPAA</span>

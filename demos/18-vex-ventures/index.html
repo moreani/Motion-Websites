@@ -105,8 +105,10 @@ h1{font-size:clamp(36px,10.6vh,102px);line-height:.92;letter-spacing:-.045em;fon
 .plate__video{width:100%;height:100%;object-fit:cover;object-position:center 46%;
   filter:grayscale(1) contrast(1.08) brightness(.86);transform:scale(1.02);transition:opacity .6s var(--ease-out-expo),transform 1.8s var(--ease-out-expo)}
 .plate__video.is-settling{transform:scale(1.05)}
-.plate__cap{position:absolute;left:var(--pad);right:var(--pad);bottom:11px;display:flex;justify-content:space-between;gap:16px;
-  color:rgba(242,239,233,.72);text-shadow:0 1px 12px rgba(0,0,0,.6)}
+.plate::after{content:"";position:absolute;inset:auto 0 0;height:38%;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,6,6,0) 0%,rgba(6,6,6,.46) 100%)}
+.plate__cap{position:absolute;z-index:2;left:var(--pad);right:var(--pad);bottom:11px;display:flex;justify-content:space-between;gap:16px;
+  color:rgba(247,245,240,.95);text-shadow:0 1px 3px rgba(0,0,0,.85),0 2px 14px rgba(0,0,0,.55)}
 .plate__cap .mono{font-size:9.5px;letter-spacing:.15em}
 .plate__noise{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background-image:var(--noise)}
 
@@ -155,7 +157,8 @@ h1{font-size:clamp(36px,10.6vh,102px);line-height:.92;letter-spacing:-.045em;fon
     padding:14px 0 clamp(22px,4vh,32px)}
   .field h1{grid-column:1;grid-row:2}
   .field .aside{grid-column:1;grid-row:3}
-  .corner{position:static;font-size:9px;letter-spacing:.14em}
+  .corner{position:static;font-size:8.5px;letter-spacing:.1em;white-space:nowrap}
+  .frame{padding-bottom:env(safe-area-inset-bottom)}
   .corner--tr{justify-content:flex-end}
   .corner--bl,.corner--br{display:none}
   .field__meta{display:flex;justify-content:space-between;gap:12px;padding-bottom:clamp(20px,4vh,34px)}
@@ -231,7 +234,7 @@ h1{font-size:clamp(36px,10.6vh,102px);line-height:.92;letter-spacing:-.045em;fon
     </div>
 
     <p class="corner corner--bl mono in-fade enter" style="--d:660ms" aria-hidden="true">32 companies · 61% follow-on</p>
-    <p class="corner corner--br mono in-fade enter" style="--d:700ms" aria-hidden="true">Plate 01</p>
+    <p class="corner corner--br mono in-fade enter" style="--d:700ms" aria-hidden="true">Volume 04 — 2026</p>
   </section>
 
   <figure class="plate">

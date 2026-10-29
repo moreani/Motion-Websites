@@ -216,7 +216,7 @@ h2 em{font-style:normal;color:rgba(241,243,242,.42)}
 /* ---------- closing ---------- */
 .closing{padding:clamp(70px,9vw,128px) 0 clamp(56px,7vw,90px);border-top:1px solid var(--hair-2);background:var(--bg-2)}
 .closing__inner{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(24px,4vw,38px)}
-.closing h2{font-size:clamp(2.2rem,5.6vw,4.8rem);max-width:15ch}
+.closing h2{font-size:clamp(2.2rem,5.6vw,4.8rem);max-width:20ch}
 .closing p{font-size:15px;line-height:1.66;color:var(--muted);max-width:42ch}
 .closing .actions{margin-top:0}
 
@@ -256,13 +256,12 @@ h2 em{font-style:normal;color:rgba(241,243,242,.42)}
 @media (hover:none),(max-width:1023px){
   .scrub__track{display:none}
   .scrub{padding-top:12px}
-  #timecode{display:none}
-  .hero__video{transform:none;object-position:56% 42%}
+  .hero__video{transform:none;object-position:44% 36%}
 }
 @media (max-aspect-ratio:11/10){
   .hero__scrim{background:
-    linear-gradient(to top,rgba(5,6,7,.98) 0%,rgba(5,6,7,.9) 28%,rgba(5,6,7,.56) 60%,rgba(5,6,7,.3) 100%),
-    linear-gradient(to right,rgba(5,6,7,.55),rgba(5,6,7,.14) 68%,rgba(5,6,7,0))}
+    linear-gradient(to top,rgba(5,6,7,.99) 0%,rgba(5,6,7,.94) 30%,rgba(5,6,7,.72) 62%,rgba(5,6,7,.26) 100%),
+    linear-gradient(to right,rgba(5,6,7,.5),rgba(5,6,7,.12) 68%,rgba(5,6,7,0))}
 }
 @media (max-height:740px){
   .hero__inner{padding-top:84px}
@@ -356,7 +355,7 @@ h2 em{font-style:normal;color:rgba(241,243,242,.42)}
           <video muted autoplay loop playsinline preload="metadata"
                  src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_092455_089c54f8-3b03-4966-9df1-e9746063d0ef.mp4"
                  aria-hidden="true"></video>
-          <figcaption class="panel__meta mono"><span>Subject 07 · field site 03</span><span>2,400 m · −14 °C</span></figcaption>
+          <figcaption class="panel__meta mono"><span>Field capture 07 · signal study</span><span>2,400 m · −14 °C</span></figcaption>
         </figure>
       </div>
 
@@ -521,6 +520,7 @@ document.documentElement.classList.add('js');
         video.loop = true;
         label.textContent = 'Autoplay';
         hint.textContent = 'Touch device · looping';
+        tc.textContent = 'Looping';
         video.play().catch(function () {});
       }
       setRatio();

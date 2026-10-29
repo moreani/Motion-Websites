@@ -287,8 +287,8 @@ html.js .plate__video.is-ready{
   padding:10px 0 2px;
   scroll-snap-type:x proximity;scroll-padding-left:0;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 84px),transparent 100%);
-  mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 84px),transparent 100%);
+  -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 56px),transparent 100%);
+  mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 56px),transparent 100%);
 }
 .rail__track::-webkit-scrollbar{display:none}
 .rail__track:focus-visible{outline:2px solid var(--amber);outline-offset:6px}
@@ -311,13 +311,19 @@ html.js .plate__video.is-ready{
   font-variant-numeric:tabular-nums;
 }
 .poster__title{
-  margin-top:auto;padding-top:18px;
+  position:relative;z-index:1;padding-top:9px;
   font-family:var(--serif);font-optical-sizing:auto;font-weight:400;
-  font-size:clamp(17px,1.5vw,21px);line-height:1.04;letter-spacing:-.005em;text-transform:uppercase;
+  font-size:clamp(18px,1.62vw,23px);line-height:1.06;letter-spacing:-.004em;text-transform:uppercase;
 }
+.poster__top,.poster__foot,.poster__genre{position:relative;z-index:1}
+.poster__genre{
+  display:flex;align-items:center;gap:7px;margin-top:auto;
+  font-size:7.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;opacity:.55;
+}
+.poster__genre::before{content:"";width:15px;height:1px;background:currentColor;opacity:.8}
 .poster__foot{
   display:flex;justify-content:space-between;align-items:baseline;gap:8px;
-  margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.18);
+  margin-top:auto;padding-top:7px;border-top:1px solid rgba(255,255,255,.18);
   font-size:7.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;opacity:.62;
 }
 .poster__mark{color:var(--amber);opacity:.9;font-variant-numeric:tabular-nums}
@@ -488,6 +494,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--teal" href="#now-premiering" aria-label="Salt and Static, 2025, one hour fifty-two minutes, directed by J. Okafor">
               <span class="poster__top"><span>2025</span><span>1h 52m</span></span>
+              <span class="poster__genre">Thriller</span>
               <span class="poster__title">Salt<br>&amp; Static</span>
               <span class="poster__foot"><span>Dir. J. Okafor</span><span class="poster__mark">01</span></span>
             </a>
@@ -495,6 +502,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--rust" href="#now-premiering" aria-label="The Quiet Part, 2026, one hour forty-four minutes, directed by L. Serrano">
               <span class="poster__top"><span>2026</span><span>1h 44m</span></span>
+              <span class="poster__genre">Drama</span>
               <span class="poster__title">The<br>Quiet Part</span>
               <span class="poster__foot"><span>Dir. L. Serrano</span><span class="poster__mark">02</span></span>
             </a>
@@ -502,6 +510,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--bone" href="#now-premiering" aria-label="Vessel, 2024, two hours one minute, directed by A. Haddad">
               <span class="poster__top"><span>2024</span><span>2h 01m</span></span>
+              <span class="poster__genre">Documentary</span>
               <span class="poster__title">Vessel</span>
               <span class="poster__foot"><span>Dir. A. Haddad</span><span class="poster__mark">03</span></span>
             </a>
@@ -509,6 +518,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--olive" href="#now-premiering" aria-label="Ninth Street, 2025, one hour forty-eight minutes, directed by K. Osei">
               <span class="poster__top"><span>2025</span><span>1h 48m</span></span>
+              <span class="poster__genre">Crime</span>
               <span class="poster__title">Ninth<br>Street</span>
               <span class="poster__foot"><span>Dir. K. Osei</span><span class="poster__mark">04</span></span>
             </a>
@@ -516,6 +526,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--midnight" href="#now-premiering" aria-label="A Longer Winter, 2023, one hour fifty-nine minutes, directed by M. Voss">
               <span class="poster__top"><span>2023</span><span>1h 59m</span></span>
+              <span class="poster__genre">Drama</span>
               <span class="poster__title">A Longer<br>Winter</span>
               <span class="poster__foot"><span>Dir. M. Voss</span><span class="poster__mark">05</span></span>
             </a>
@@ -523,6 +534,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--graphite" href="#now-premiering" aria-label="Fathom, 2026, one hour thirty-seven minutes, directed by R. Ivers">
               <span class="poster__top"><span>2026</span><span>1h 37m</span></span>
+              <span class="poster__genre">Mystery</span>
               <span class="poster__title">Fathom</span>
               <span class="poster__foot"><span>Dir. R. Ivers</span><span class="poster__mark">06</span></span>
             </a>
@@ -530,6 +542,7 @@ html.js .plate__video.is-ready{
           <li>
             <a class="poster poster--slate" href="#now-premiering" aria-label="Low Tide, 2025, one hour forty-one minutes, directed by S. Aoki">
               <span class="poster__top"><span>2025</span><span>1h 41m</span></span>
+              <span class="poster__genre">Romance</span>
               <span class="poster__title">Low<br>Tide</span>
               <span class="poster__foot"><span>Dir. S. Aoki</span><span class="poster__mark">07</span></span>
             </a>
